@@ -1,21 +1,22 @@
 #!/bin/bash
 
 # First things first
-sudo pacman -S --noconfirm git go base-devel multilib-devel
+pacman -S --noconfirm git go base-devel multilib-devel
 
 # Install Rust using pacman
-sudo pacman -S --noconfirm rustup
+pacman -S --noconfirm rustup
 
 # Prompt user to choose Rust version with an 8-second timeout
 echo "Select default Rust version using 'rustup default <version>' (e.g., stable, nightly)"
 read -t 8 -p "Enter Rust version (timeout in 8 seconds): " rust_version
-rustup default "$rust_version" || { echo "Failed to set default Rust version"; exit 1; }
+rustup default "$rust_version" || { echo "Failed to set default Rust version"; sleep 8; }
 
-# Install yay mkdir AUR Install the following 3 packages in 
-sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/aurutils.git && cd aurutils && makepkg -si
-sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
-sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si
-# Install other essential packages with pacman
+# Install some utils mkdir AUR Install the following 3 
+pacman -S --needed base-devel && git clone https://aur.archlinux.org/aurutils.git && cd aurutils && makepkg -si
+pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+pacman -S --needed base-devel && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si
+
+# Install this stuff now
 yay -S --noconfirm autoconf autoconf-archive automake starship \
   wlroots wayland wayland-utils wayland-protocols gdb ninja gcc cmake meson \
   libxcb xcb-proto xcb-util xcb-util-keysyms libxfixes libx11 libxcomposite \
@@ -40,8 +41,6 @@ yay -S --noconfirm autoconf autoconf-archive automake starship \
   python-pyaml python-click yad aconfmgr-git xdg-base-dir-env xdg-su sudo xdg-environment \
   gtk4-layer-shell
 
-# Continue with the rest of the script...
-
 # Update user dirs
 xdg-user-dirs-update
 
@@ -62,8 +61,8 @@ cp -r ~/.config/hypr/configs/wofi ~/.config/wofi
 cp ~/.config/hypr/configs/config.fish ~/.config/fish/config.fish
 
 # Set permissions for scripts
-sudo chmod +x ~/.config/hypr/scripts/*
-sudo chmod +x ~/.config/ags/scripts/*
+chmod +x ~/.config/hypr/scripts/*
+chmod +x ~/.config/ags/scripts/*
 
 # Setup environment
 sudo cp /etc/environment /etc/environmentOLD
@@ -96,7 +95,4 @@ git clone https://github.com/stuomas/delicious-sddm-theme.git && cd delicious-sd
 sudo systemctl enable sddm
 
 # Update Arch
-sudo pacman -Syu --noconfirm
-
-# Manually reboot when needed
-echo "Please manually reboot your system."
+sudo pacman -Syu --noconfirm && reboot
