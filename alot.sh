@@ -1,19 +1,31 @@
 #!/bin/bash
 
-# pacman installs these
-pacman -S --noconfirm git base-devel multilib-devel go rustup xdg-user-dirs
-
-# Prompt user to choose default rustup version
-echo "Choose default Rust version using 'rustup default <version>' (e.g., stable, nightly)"
-read -t 8 -p "Enter Rust version (timeout in 8 seconds): " rust_version
-rustup default "$rust_version" || { echo "Failed to set default Rust version"; sleep 8; }
-
-# Update xdg-user-dirs
+# onlt this with sud
+sudo pacman -S xdg-user-dirs 
 xdg-user-dirs-update
+sudo pacman -S xdg-user-dirs-gtk
+xdg-user-dirs-update
+
+# lets goooooooooo
+pacman -S --noconfirm git base-devel multilib-devel go 
+
+
+# Install Rustup
+pacman -S --noconfirm rustup
+
+# Sleep until Rustup installation completes
+while ! command -v rustup &> /dev/null; do
+    sleep 1
+done
+
+# Set Rust version to stable without prompting the user
+rustup default stable || { echo "Failed to set default Rust version"; sleep 8; }
+
+
 
 # Check but do not exit this script ever
 git clone https://aur.archlinux.org/aurutils.git && cd aurutils && makepkg -si 
-git clone https://aur.archlinux.org/pacaur.git && cd pacaur && makepkg -si
+git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si
 git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
 
 # Install these with yay
@@ -41,7 +53,6 @@ packages=(
     "xorg-xinput"
     "libxrender"
     "pixman"
-    "wayland-protocols"
     "cairo"
     "pango"
     "seatd"
@@ -101,6 +112,7 @@ packages=(
     "hyprshot-git"
     "bc"
     "sysstat"
+    "gtk-layer-shell"
     "kitty"
     "alacritty"
     "sassc"
@@ -126,7 +138,10 @@ packages=(
     "nm-connection-editor"
     "glib2"
     "gtk3"
-    "deadd-notification-center-bin"
+    "dea# Prompt user to choose default rustup version
+echo "Choose default Rust version using 'rustup default <version>' (e.g., stable, nightly)"
+read -t 8 -p "Enter Rust version (timeout in 8 seconds): " rust_version
+rustup default "$rust_version" || { echo "Failed to set default Rust version"; sleep 8; }dd-notification-center-bin"
     "cava"
     "thunar"
     "ffmpeg"
@@ -155,9 +170,8 @@ packages=(
     "shell-color-scripts"
     "udisks2"
     "udiskie"
-    "aurutils"
     "pavucontrol"
-    "xdg-user-dirs"
+    
     "pacman-contrib"
     "reflector"
     "python-pip"
@@ -189,6 +203,7 @@ git clone https://github.com/l1nux-th1ngz/colors.git
 # Pause for user
 read -t 8 -p "Waiting for user input..."
 
+# add deadd make cava mpd geany eww to .config
 # Copy files
 cp ~/.config/fish/config.fish ~/.config/fish/config.back.fish
 cp -r my-hyprland-config ~/.config/hypr
