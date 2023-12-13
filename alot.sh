@@ -13,13 +13,21 @@ if ! command -v paru &> /dev/null; then
 fi
 
 # Prompt user to choose between yay and paru
-chosen_installer=$(yad --width 300 --title "Choose AUR Helper" --button="gtk-yes:0" --button="gtk-no:1" --text "Choose AUR helper:" --list --column="Helper" "yay" "paru")
+echo "Choose AUR helper (1 for yay, 2 for paru):"
+read -r choice
 
-if [ "$chosen_installer" = "yay" ]; then
-    aur_helper="yay"
-else
-    aur_helper="paru"
-fi
+case "$choice" in
+    1)
+        aur_helper="yay"
+        ;;
+    2)
+        aur_helper="paru"
+        ;;
+    *)
+        echo "Invalid choice. Defaulting to yay."
+        aur_helper="yay"
+        ;;
+esac
 
 # Install other essential packages with the chosen AUR helper
 $aur_helper -S --noconfirm autoconf autoconf-archive automake starship \
@@ -101,5 +109,5 @@ sudo systemctl enable sddm
 # Update Arch
 sudo pacman -Syu --noconfirm
 
-# Reboot
-reboot
+# Notify user to manually reboot
+echo "Installation complete. Please manually reboot your system."
