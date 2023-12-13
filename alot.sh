@@ -21,7 +21,8 @@ done
 # Set Rust version to stable without prompting the user
 rustup default stable || { echo "Failed to set default Rust version"; sleep 8; }
 
-
+# Chroot into the temporary directory
+arch-chroot /path/to/chroot/directory /bin/bash <<EOF
 
 # Check but do not exit this script ever
 git clone https://aur.archlinux.org/aurutils.git && cd aurutils && makepkg -si 
