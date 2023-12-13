@@ -11,11 +11,12 @@ echo "Select default Rust version using 'rustup default <version>' (e.g., stable
 read -t 8 -p "Enter Rust version (timeout in 8 seconds): " rust_version
 rustup default "$rust_version" || { echo "Failed to set default Rust version"; exit 1; }
 
-# Install yay
-sudo pacman -S --needed git base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
-
+# Install yay mkdir AUR Install the following 3 packages in 
+sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/aurutils.git && cd aurutils && makepkg -si
+sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
+sudo pacman -S --needed base-devel && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si
 # Install other essential packages with pacman
-sudo pacman -S --noconfirm autoconf autoconf-archive automake starship \
+yay -S --noconfirm autoconf autoconf-archive automake starship \
   wlroots wayland wayland-utils wayland-protocols gdb ninja gcc cmake meson \
   libxcb xcb-proto xcb-util xcb-util-keysyms libxfixes libx11 libxcomposite \
   xorg-xinput libxrender pixman wayland-protocols cairo pango seatd \
@@ -36,7 +37,8 @@ sudo pacman -S --noconfirm autoconf autoconf-archive automake starship \
   aylurs-gtk-shell eww-wayland zenity aalib jp2a ascii i2pd lsd thefuck \
   archinstall shell-color-scripts udisks2 udiskie aurutils pavucontrol \
   xdg-user-dirs pacman-contrib reflector python-pip python-pipx tk python-connect \
-  python-pyaml python-click yad aconfmgr-git
+  python-pyaml python-click yad aconfmgr-git xdg-base-dir-env xdg-su sudo xdg-environment \
+  gtk4-layer-shell
 
 # Continue with the rest of the script...
 
