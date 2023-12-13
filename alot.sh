@@ -1,23 +1,28 @@
 #!/bin/bash
 
-# First things first
-pacman -S --noconfirm git go base-devel multilib-devel
+# Check if yay is installed
+if ! command -v yay &> /dev/null; then
+    # Install yay if not already installed
+    pacman -S --noconfirm yay
+fi
 
-# Install Rust using pacman
-pacman -S --noconfirm rustup
+# Check if paru is installed
+if ! command -v paru &> /dev/null; then
+    # Install paru if not already installed
+    yay -S --noconfirm paru
+fi
 
-# Prompt user to choose Rust version with an 8-second timeout
-echo "Select default Rust version using 'rustup default <version>' (e.g., stable, nightly)"
-read -t 8 -p "Enter Rust version (timeout in 8 seconds): " rust_version
-rustup default "$rust_version" || { echo "Failed to set default Rust version"; sleep 8; }
+# Prompt user to choose between yay and paru
+chosen_installer=$(yad --width 300 --title "Choose AUR Helper" --button="gtk-yes:0" --button="gtk-no:1" --text "Choose AUR helper:" --list --column="Helper" "yay" "paru")
 
-# Install some utils mkdir AUR Install the following 3 
-pacman -S --needed base-devel && git clone https://aur.archlinux.org/aurutils.git && cd aurutils && makepkg -si
-pacman -S --needed base-devel && git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
-pacman -S --needed base-devel && git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si
+if [ "$chosen_installer" = "yay" ]; then
+    aur_helper="yay"
+else
+    aur_helper="paru"
+fi
 
-# Install this stuff now
-yay -S --noconfirm autoconf autoconf-archive automake starship \
+# Install other essential packages with the chosen AUR helper
+$aur_helper -S --noconfirm autoconf autoconf-archive automake starship \
   wlroots wayland wayland-utils wayland-protocols gdb ninja gcc cmake meson \
   libxcb xcb-proto xcb-util xcb-util-keysyms libxfixes libx11 libxcomposite \
   xorg-xinput libxrender pixman wayland-protocols cairo pango seatd \
@@ -41,8 +46,7 @@ yay -S --noconfirm autoconf autoconf-archive automake starship \
   python-pyaml python-click yad aconfmgr-git xdg-base-dir-env xdg-su sudo xdg-environment \
   gtk4-layer-shell
 
-# Update user dirs
-xdg-user-dirs-update
+# Continue with the rest of the script...
 
 # Start paccache.timer
 sudo systemctl enable paccache.timer
@@ -83,7 +87,7 @@ mkdir -p ~/.themes
 tar xvf ~/.config/hypr/configs/gtk-themes/*.tar.gz -C ~/.themes
 
 # Install plymouth
-yay -S --noconfirm plymouth-theme-sweet-arch-git
+$aur_helper -S --noconfirm plymouth-theme-sweet-arch-git
 
 # Enable plymouth
 sudo plymouth-set-default-theme -R sweet-arch
@@ -95,4 +99,7 @@ git clone https://github.com/stuomas/delicious-sddm-theme.git && cd delicious-sd
 sudo systemctl enable sddm
 
 # Update Arch
-sudo pacman -Syu --noconfirm && reboot
+sudo pacman -Syu --noconfirm
+
+# Reboot
+reboot
