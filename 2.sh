@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# DO NOT RUN THIS AS ROOT IT WILL CAUSE CRITICAL DAMAGE TO YOUR SYSTEM
 
-# Check but do not exit this script ever
 git clone https://aur.archlinux.org/aurutils.git && cd aurutils && makepkg -si 
 git clone https://aur.archlinux.org/paru.git && cd paru && makepkg -si
 git clone https://aur.archlinux.org/yay.git && cd yay && makepkg -si
@@ -12,8 +10,13 @@ while [[ ! -x "$(command -v aur)" || ! -x "$(command -v paru)" || ! -x "$(comman
     sleep 1
 done
 
-# Install these with yay
+#  yay
 packages=(
+    "nodejs"
+    "gtk2"
+    "gtk3"
+    "gtk4"
+    "python"
     "aalib"
     "jp2a"
     "ascii"
@@ -31,7 +34,7 @@ packages=(
     "typescript"
     "npm"
 
-    # aylurs-gtk-shell and additional packages
+    "cava"
     "eww-wayland"
     "zenity"
     "dead-notification-center-bin"
@@ -51,6 +54,8 @@ packages=(
     "tumbler"
     "hyprland-git"
     "aylurs-gtk-shell"
+    "hyprland-git"
+    "waybar-hyprland-cava-git"
 )
 
 
