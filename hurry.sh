@@ -9,7 +9,7 @@ yay -S --noconfirm \
   xorg-xinput libxrender pixman wayland-protocols cairo pango seatd libxkbcommon xcb-util-wm xorg-xwayland \
   libinput libliftoff libdisplay-info cpio tomlplusplus plymouth sddm \
   firefox cava hayprland-git rofi-lbonn-wayland visual-studio-code-bin xdg-user-dirs xdg-user-dirs-gtk \
-  kitty alacritty wezterm
+  kitty alacritty wezterm waybar-hyprland-cava-git
 
 # Enable necessary services
 systemctl enable sddm.service
